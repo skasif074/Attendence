@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login | Attendance Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #141e30, #243b55);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: white;
+    }
+
+    .login-container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      text-align: center;
+      width: 300px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 6px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #00d1b2;
+      border: none;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background: #00b89c;
+    }
+
+    #message {
+      margin-top: 10px;
+      color: #ffcccb;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Login / Sign Up</h2>
+    <input type="text" id="username" placeholder="Username" />
+    <input type="password" id="password" placeholder="Password" />
+    <button onclick="login()">Login</button>
+    <button onclick="signup()">Sign Up</button>
+    <p id="message"></p>
+  </div>
+
+  <script>
+    function getUsers() {
+      return JSON.parse(localStorage.getItem("users") || "{}");
+    }
+
+    function saveUser(username, password) {
+      const users = getUsers();
+      users[username] = password;
+      localStorage.setItem("users", JSON.stringify(users));
+    }
+
+    function login() {
+      const user = document.getElementById("username").value.trim();
+      const pass = document.getElementById("password").value.trim();
+      const users = getUsers();
+
+      if (users[user] && users[user] === pass) {
+        localStorage.setItem("loggedInUser", user);
+        window.location.href = "tracker.html";
+      } else {
+        document.getElementById("message").innerText = "Invalid login credentials!";
+      }
+    }
+
+    function signup() {
+      const user = document.getElementById("username").value.trim();
+      const pass = document.getElementById("password").value.trim();
+      const users = getUsers();
+
+      if (users[user]) {
+        document.getElementById("message").innerText = "Username already exists!";
+      } else if (user === "" || pass === "") {
+        document.getElementById("message").innerText = "Please fill in all fields.";
+      } else {
+        saveUser(user, pass);
+        document.getElementById("message").innerText = "Signup successful! You can now log in.";
+      }
+    }
+  </script>
+</body>
+</html>
